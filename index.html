@@ -59,49 +59,70 @@
 							<p>We implemented the following features in our ray tracer.</p>
 							<div class="items style1 medium onscroll-fade-in">
 								<section>
-									<span class="icon style2 major fa-gem"></span>
 									<h3>Lighting</h3>
 									<p>We implemented four different types of light, Ambient Light, Point Light, Directional Light and Spotlight. Ambient light accounts for the uncalculated light in the scene, spotlight resembles theatre lights which emits light in a cone, point light emits light in all directions while directional light only emits in a specified direction.</p>
 								</section>
 								<section>
-									<span class="icon solid style2 major fa-save"></span>
 									<h3>Materials</h3>
 									<p>We implemented phong material model which can be used to produce many different types of materials just by changing the specular and diffuse component. For perfectly specular materials, the diffuse component is zero, while for perfectly diffuse or matte material, the specular component is zero. A combination of specular and diffuse components produces phong material.</p>
 								</section>
 								<section>
-									<span class="icon solid style2 major fa-chart-bar"></span>
-									<h3>Smooth Shading</h3>
-									<p>Our ray tracer supports both flat and smooth shading. In flat shading, each triangle has a constant normal, causing each triangle to appear "flat". In smooth shading, the normal of each triangle varies based on the normals of the adjacent triangles, creating a smoother appearance. This allows us to better represent smooth surfaces as triangle meshes.</p>
+									<h3>Acceleration Structures</h3>
+									<p>We implemented two acceleration structures, Regular Grids and BVH (Bounding Volume Heiarchy). We conducted tests on regular grids only as BVH had some issues when it came to rendering the final scene due to the high number of primitives. Both structures gave huge boosts in speed due to which we were able to render high resolution scenes with thousands of primitives keeping quick render times.</p>
 								</section>
 								<section>
-									<span class="icon solid style2 major fa-wifi"></span>
-									<h3>Shadows</h3>
-									<p>Our ray tracer can even cast shadows. Shadows are made when a point in the scene has no direct way to the light source.</p>
+									<h3>Camera</h3>
+									<p>We implemented both parallel as well as perspective viewing in our raytracer. </p>
 								</section>
 								<section>
-									<span class="icon solid style2 major fa-cog"></span>
-									<h3>Anti-aliasing</h3>
-									<p>Our text book discussed three approaches to anti-aliasing, the most promising of them was Jittered Sampling. We implemented it to smoothen edges and curves in our image.</p>
+									<h3>Image reading and writing</h3>
+									<p>We extended our image class so that in can not only write final images but also read .ppm images for texture information.</p>
 								</section>
 								<section>
-									<span class="icon style2 major fa-paper-plane"></span>
-									<h3>Acceleration Structure</h3>
-									<p>We implemented two acceleration structures, Regular Grids and BVH (Bounding Volume Heiarchy). We have ran all our tests on regular grids only as BVH had some issues and wasn't working correcty. Regular grids gave huge boosts in speed due to which we were able to render high resolution scenes with many thousands of primitives in a very short amount of time.</p>
-
-								</section>
-								<section>
-									<span class="icon solid style2 major fa-sync-alt"></span>
-									<h3>OBJ Loader</h3>
-									<p>Our ray tracer supports loading scenes as .obj file. To load models from blender or any other website, we first export them to .obj file format along with their material properties, and then load them into our ray tracer.</p>
-								</section>
-								<section>
-									<span class="icon solid style2 major fa-hashtag"></span>
-									<h3>Texture Mapping</h3>
-									<p>Our ray tracer also supports texture mapping. The models that have a texture wrapped around can also be exported and loaded into our scene. For the texture information, blender genrates a .mtl file which contains the information of how and what image is wrapped around. The images must be in .ppm file format.</p>
+									<h3>Primitives</h3>
+									<p>Our raytracer supports planes, triangles (flat as well as smooth), and spheres as the basic geometric primitives.</p>
 								</section>
 							</div>
 						</div>
 					</section>
+
+					<section class="wrapper style1 align-center">
+						<div class="inner">
+							<h2>Bonus Features</h2>
+							<p>A complete list of implemented bonus functionalities is given below.</p>
+							<div class="items style1 medium onscroll-fade-in">
+								<section>
+									<h3>OBJ Loader</h3>
+									<p>Our ray tracer supports loading scenes as .obj file. A mesh or any scene consisting of multiple meshes can simply be first exported to .obj format through a 3D software and can then simply be loaded into our ray tracer. Our raytracer can also read material information from generated .mtl files along with the .obj.</p>
+								</section>
+								<section>
+									<h3>Blender Correspondence</h3>
+									<p>We used Blender for modelling and exporting our concept scene, and having to constantly figure out co-ordinate transformations proved to be quite a grunt hassle. Therefore, we settled this by establishing a one-to-one mapping with Blender's default viewing co-ordinates. A 3D-coordinate (x, y, z) in the default Blender space gets mapped to (x, -z, -y) in our raytracer space. Because of this, any scene that can be viewed in Blender can be directly loaded as an .obj in our raytracer without any worry of co-ordinate transformations.</p>
+								</section>
+								<section>
+									<h3>Shadows</h3>
+									<p>All our implemented light sources support shadows through the concept of secondary ray generation as per the book. This results in beautiful and realistic renders - as documented ahead.</p>
+								</section>
+								<section>
+									<h3>Texture Mapping</h3>
+									<p>Our ray tracer also supports texture mapping. Models in Blender that have an image texture wrapped can simply be exported and loaded into our scene using the texture properties in the implemented Phong material - with the only extra cost of converting the image texture to .ppm format. This is done through using the UV unwrapping information in the .obj file which is generated by Blender. This feature can be easily extended to incorporate normal and bump mapping since most of the functionality will overlap.</p>
+								</section>
+								<section>
+									<h3>Anti-Aliasing</h3>
+									<p>For smoothing out jaggies, we implemented a jittered sampler in our raytracer. The principle it operates on is that multiple rays are shot per pixel instead of one, producing a much nicer interpolation in the colors assigned to each pixel. This can be best scene in action in the final render presented above.</p>
+								</section>
+								<section>
+									<h3>Smooth Shading</h3>
+									<p>Our ray tracer supports both flat and smooth shading. In flat shading, the primitive triangle has a single normal, causing the mesh to appear "flat". In smooth shading, the primitive triangle is tweaked such that each triangle vertex possessess its own normal vector, which is then interpolated to better represent smooth surfaces as triangle meshes.</p>
+								</section>
+								<section>
+									<h3>Multithreading</h3>
+									<p>Our main raytracing loop also takes use of multithreading. This was done simply using the OpenMP library for C++, and this resulted in even quicker render times - on top of the acceleration structures.</p>
+								</section>
+							</div>
+						</div>
+					</section>
+
 					<!-- Five -->
 						<section class="wrapper style1 align-center">
 							<div class="inner">
@@ -300,7 +321,7 @@
 								<section class="spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in">
 										<div class="content">
 											<h2>OBJ Loader</h2>
-											<p>To import meshes into our scene, we first generate a .obj file. The .obj file is then imported in our raytracer, which has been coded to reflect an exact one-to-one mapping with Blender's default viewing co-ordinates. A 3D-coordinate (x, y, z) in Blender space gets mapped to (x, -z, -y) in our raytracer space. This is a pigeon model downloaded from Windows 3D viewer in .fbx format. It was then exported to blender to export a .obj along with .mtl file for material information. This image shows a render of this model through our ray tracer with beautiful blue and white spotlights.</p>
+											<p>To import meshes into our scene, we first generate a .obj file. The .obj file is then imported in our raytracer, which has been coded to reflect an exact one-to-one mapping with Blender's default viewing co-ordinates. A 3D-coordinate (x, y, z) in Blender space gets mapped to (x, -z, -y) in our raytracer space, as explained previously. This is a pigeon model downloaded from Windows 3D viewer in .fbx format. It was then exported to blender to export a .obj along with .mtl file for material information. This image shows a render of this model through our ray tracer with beautiful blue and white spotlights.</p>
 										</div>
 										<div class="image">
 											<a href="images/pigeonWhite.png" target="_blank">
@@ -761,6 +782,7 @@
 													<dt>Bly7's OBJ Loader from <a href="https://github.com/Bly7/OBJ-Loader"> Github </a> </dt>
 													<dt>Libing Zeng's raytracer for texture mapping from <a href="https://github.com/libingzeng/RayTraceGroundUp/tree/master/src/texture">GitHub</a></dt>
 													<dt> The textbook, "Mathematical Tools in Computer Graphics with C# implementations", by Alexandre Hardy for Spot Lights </dt>
+													<dt>Professor Waqar Saleem, the course instructor, for his continuous help and for offerting this awesome course.</dt>
 													<dt>Ahmed Bilal, the projects lab RA, for allowing us to stay late in the lab for the project</dt>
 												</dl>
 
